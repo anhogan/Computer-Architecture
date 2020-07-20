@@ -5,15 +5,24 @@ class CPU:
     """Main CPU class."""
     def __init__(self):
         """Construct a new CPU."""
+        self.running = True
+
+        # Storage
         self.ram = [0] * 256
         self.registers = [0] * 8
+
+        # Pointers
         self.pc = 0
-        self.running = True
+        self.sp = 0xF3
+
+        # Reference Table
         self.branchtable = {
             0b00000001: self.HLT,
             0b10000010: self.LDI,
             0b01000111: self.PRN,
-            0b10100010: self.MUL
+            0b10100010: self.MUL,
+            0b01000101: self.PUSH,
+            0b01000110: self.POP
         }
     
     def ram_read(self, MAR):
@@ -36,6 +45,17 @@ class CPU:
     def MUL(self, a, b):
         self.alu("MUL", a, b)
         self.pc += 3
+    
+    def PUSH(self, a, b):
+        self.sp -= 1
+        self.ram[self.sp] = self.registers[a]
+        self.pc += 2
+
+    def POP(self, a, b):
+        self.registers[a] = self.ram[self.sp]
+        self.ram[self.sp] = 0
+        self.sp += 1
+        self.pc += 2
 
     def load(self, file):
         """Load a program into memory."""
