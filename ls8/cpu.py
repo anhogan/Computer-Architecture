@@ -8,38 +8,56 @@ class CPU:
         self.ram = [0] * 256
         self.registers = [0] * 8
         self.pc = 0
+        self.running = True
+        self.branchtable = {
+            0b00000001: self.HLT,
+            0b10000010: self.LDI,
+            0b01000111: self.PRN,
+            0b10100010: self.MUL
+        }
     
     def ram_read(self, MAR):
         return self.ram[MAR]
     
     def ram_write(self, MAR, MDR):
         self.ram[MAR] = MDR
+    
+    def HLT(self, a, b):
+        self.running = False
 
-    def load(self):
+    def LDI(self, a, b):
+        self.registers[a] = b
+        self.pc += 3
+
+    def PRN(self, a, b):
+        print(self.registers[a])
+        self.pc += 2
+
+    def MUL(self, a, b):
+        self.alu("MUL", a, b)
+        self.pc += 3
+
+    def load(self, file):
         """Load a program into memory."""
         address = 0
 
-        # For now, we've just hardcoded a program:
+        with open(file) as f:
+            for line in f:
+                if line[0] == '\n' or line[0] == '#':
+                    continue
 
-        program = [
-            # From print8.ls8
-            0b10000010, # LDI R0,8
-            0b00000000,
-            0b00001000,
-            0b01000111, # PRN R0
-            0b00000000,
-            0b00000001, # HLT
-        ]
+                binary_code = line[:8]
+                ram_value = int(binary_code, 2)
 
-        for instruction in program:
-            self.ram[address] = instruction
-            address += 1
+                self.ram[address] = ram_value
+                address += 1
 
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
         if op == "ADD":
-            self.reg[reg_a] += self.reg[reg_b]
-        #elif op == "SUB": etc
+            self.registers[reg_a] += self.registers[reg_b]
+        elif op == "MUL":
+            self.registers[reg_a] *= self.registers[reg_b]
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -64,22 +82,9 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        HLT = 0b00000001
-        LDI = 0b10000010
-        PRN = 0b01000111
-
-        running = True
-
-        while running:
+        while self.running:
             IR = self.ram[self.pc]
             operand_a = self.ram_read(self.pc + 1)
             operand_b = self.ram_read(self.pc + 2)
 
-            if IR == HLT:
-                running = False
-            elif IR == LDI:
-                self.registers[operand_a] = operand_b
-                self.pc += 3
-            elif IR == PRN:
-                print(self.registers[operand_a])
-                self.pc += 2
+            self.branchtable[IR](operand_a, operand_b)
