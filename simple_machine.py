@@ -57,7 +57,9 @@ while running:
     register_two = memory[pc + 2]
 
     registers[register_one] = registers[register_one] + registers[register_two]
-    
+
     pc += 2
 
   pc += 1
+
+  # pc += 1 + (command >> 6)

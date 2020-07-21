@@ -90,3 +90,23 @@ NUMBER REPRESENTATION
 
 # Decimal > Hex > Binary
 # Binary > Hex > Decimal
+
+'''
+BITWISE OPERATIONS
+'''
+
+# Operation   Boolean Operator    Bitwise Operator    Output
+# AND         && / and            &                   True if both are 1, otherwise False
+# OR          || / or             |                   True if at least one is a 1, otherwise False
+# NOT         ! / not             ~                   True if 0, False if 1
+# XOR                             |~                  True if one is 1 and the other is 0, otherwise False (exclusive or)
+
+# bin(OP) will return binary number, otherwise decimal is returned
+
+'''
+SHIFTING
+'''
+
+# Right (>>) - removes last number in binary string
+# Left (<<) - add a zero as the last number in a binary string
+# Use & to get numbers from the middle. Put 0 on indexes that you don't want so it won't come through and 1 where you do
