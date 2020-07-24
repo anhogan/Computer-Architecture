@@ -16,3 +16,7 @@ Split into 0bXXXX and 0bXXXX, count eact split half and convert to hex symbols
 
 For example:
 0b10101100 (Binary) > 0b1010 + 0b1100 = (8 + 2) + (8 + 4) = 10 + 12 = A + C = 0xAC (Hex)
+
+0b1101010
+
+0b110 + 0b1010 = (4 + 2) + (8 + 2) = 6 + 10 = 6 + A = 0x6A
