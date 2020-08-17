@@ -1,0 +1,22 @@
+1. The CALL instruction doesn't allow you to pass any arguments. What are some ways to effectively get arguments to a subroutine?
+Setup a branchtable where you can create a method to pass down variables. Can use memory to identify an argument stored in the register by putting it as a command. For example:
+
+10100000 # ADD R0,R0
+00000000
+00000000
+
+2. What's the result of bitwise-AND between `0b110` and `0b011`?
+  0b110
+& 0b011
+-------
+  0b010
+
+3. Convert the 8-bit binary number 0bXXXXXXXX (PM's choice) to hex.
+Split into 0bXXXX and 0bXXXX, count eact split half and convert to hex symbols
+
+For example:
+0b10101100 (Binary) > 0b1010 + 0b1100 = (8 + 2) + (8 + 4) = 10 + 12 = A + C = 0xAC (Hex)
+
+0b1101010
+
+0b110 + 0b1010 = (4 + 2) + (8 + 2) = 6 + 10 = 6 + A = 0x6A
